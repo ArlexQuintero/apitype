@@ -1,7 +1,4 @@
-// Gracias al proxy en vercel.json, usamos una ruta relativa.
-// Vercel redirige /api/* → https://69dcd32684f912a264043f10.mockapi.io/api/*
-// Esto evita cualquier problema de CORS en el navegador.
-const BASE_URL = "/api/product";
+const BASE_URL = "https://69dcd32684f912a264043f10.mockapi.io/api/product";
 
 let allProducts = [];
 let editingId = null;
@@ -89,37 +86,35 @@ function renderList(products) {
     return;
   }
 
-  el.innerHTML = products
-    .map((p) => {
-      const stockNum = parseInt(p.stock || 0);
-      const isLow = stockNum <= 5;
-      const desc = (p.descripcion || "Sin descripción").slice(0, 50);
-      const descExtra = (p.descripcion || "").length > 50 ? "…" : "";
+  el.innerHTML = products.map((p) => {
+    const stockNum = parseInt(p.stock || 0);
+    const isLow = stockNum <= 5;
+    const desc = (p.descripcion || "Sin descripción").slice(0, 50);
+    const descExtra = (p.descripcion || "").length > 50 ? "…" : "";
 
-      return `
-        <div class="product-item ${editingId == p.id ? "selected" : ""}" id="item-${p.id}">
-          <div style="min-width:0;">
-            <div class="product-name">${esc(p.name || "Sin nombre")}</div>
-            <div class="product-meta">
-              <span class="product-id">#${p.id}</span>
-              <span>${esc(desc)}${descExtra}</span>
-            </div>
+    return `
+      <div class="product-item ${editingId == p.id ? "selected" : ""}" id="item-${p.id}">
+        <div style="min-width:0;">
+          <div class="product-name">${esc(p.name || "Sin nombre")}</div>
+          <div class="product-meta">
+            <span class="product-id">#${p.id}</span>
+            <span>${esc(desc)}${descExtra}</span>
           </div>
-          <div class="product-right">
-            <div class="price-stock">
-              <span class="product-price">$${parseFloat(p.precio || 0).toFixed(2)}</span>
-              <span class="product-stock ${isLow ? "stock-low" : ""}">
-                ${isLow ? "⚠ " : ""}Stock: ${stockNum}
-              </span>
-            </div>
-            <div class="item-actions">
-              <button class="icon-btn edit-btn" onclick="startEdit(${p.id})" title="Editar">✎</button>
-              <button class="icon-btn del-btn"  onclick="deleteProduct(${p.id})" title="Eliminar">✕</button>
-            </div>
+        </div>
+        <div class="product-right">
+          <div class="price-stock">
+            <span class="product-price">$${parseFloat(p.precio || 0).toFixed(2)}</span>
+            <span class="product-stock ${isLow ? "stock-low" : ""}">
+              ${isLow ? "⚠ " : ""}Stock: ${stockNum}
+            </span>
           </div>
-        </div>`;
-    })
-    .join("");
+          <div class="item-actions">
+            <button class="icon-btn edit-btn" onclick="startEdit(${p.id})" title="Editar">✎</button>
+            <button class="icon-btn del-btn"  onclick="deleteProduct(${p.id})" title="Eliminar">✕</button>
+          </div>
+        </div>
+      </div>`;
+  }).join("");
 }
 
 function renderSkeleton() {
