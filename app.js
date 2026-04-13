@@ -1,4 +1,8 @@
-const BASE_URL = "https://69dcd32684f912a264043f10.mockapi.io/api/product";
+// Gracias al proxy en vercel.json, usamos una ruta relativa.
+// Vercel redirige /api/* → https://69dcd32684f912a264043f10.mockapi.io/api/*
+// Esto evita cualquier problema de CORS en el navegador.
+const BASE_URL = "/api/product";
+
 let allProducts = [];
 let editingId = null;
 
